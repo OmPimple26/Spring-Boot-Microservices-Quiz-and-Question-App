@@ -1,0 +1,13 @@
+# Java / Spring Boot
+*.class
+*.jar
+*.war
+*.iml
+target/
+out/
+.idea/
+*.log
+
+# Mac / Windows files
+.DS_Store
+Thumbs.db
