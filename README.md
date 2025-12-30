@@ -17,6 +17,7 @@ A complete Spring Boot Microservices project with QuizService &amp; QuestionServ
 
 2. **QuestionService** (`port: 9092` and `port: 8082`)
    - Manages questions ❓
+   - Runs multiple instances for load balancing via Eureka ⚖️
    - CRUD endpoints:
      - `POST /question` - Create a question
      - `GET /question` - Get all questions
@@ -58,7 +59,7 @@ A complete Spring Boot Microservices project with QuizService &amp; QuestionServ
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 ├── .vscode/
