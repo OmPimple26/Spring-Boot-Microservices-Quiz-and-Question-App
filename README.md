@@ -11,7 +11,7 @@ A complete Spring Boot Microservices project with QuizService &amp; QuestionServ
    - Provides configuration to all services at startup
 
   🔗 Config Repository:
-  👉 `https://github.com/OmPimple26/Centralized-Spring-Cloud-Config-for-Quiz-and-Question-Microservices-App`
+  👉 ```[https://github.com/OmPimple26/Centralized-Spring-Cloud-Config-for-Quiz-and-Question-Microservices-App](https://github.com/OmPimple26/Centralized-Spring-Cloud-Config-for-Quiz-and-Question-Microservices-       App)```
 
 2. **ServiceRegistry (Eureka)** (`port: 8761`)
    - Central service discovery 🏷️
