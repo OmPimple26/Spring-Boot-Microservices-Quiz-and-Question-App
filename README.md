@@ -1,13 +1,26 @@
 # 📚 Spring-Boot-Microservices-Quiz-and-Question-App
-A complete Spring Boot Microservices project with QuizService &amp; QuestionService 📝, Eureka Service Registry 🏷️, and API Gateway 🌐. Features CRUD operations, Feign client communication, and dynamic question fetching. Ideal for learning Microservices, Spring Cloud, and REST APIs 🚀.
+A complete Spring Boot Microservices project with QuizService &amp; QuestionService 📝, Eureka Service Registry 🏷️, and API Gateway 🌐. Features CRUD operations, Feign client communication, and dynamic question fetching. Ideal for learning Microservices, Spring Cloud, Centralized Configuration, Service Discovery and REST APIs 🚀.  
 
 ---
 
 ## 🏗️ Microservices Architecture
 
-1. **QuizService** (`port: 8081`)
+1. **Config Server** (`port: 8888`)
+   - Centralized configuration management ⚙️
+   - Fetches configs from a separate GitHub repository
+   - Provides configuration to all services at startup
+
+  🔗 Config Repository:
+  👉 `https://github.com/OmPimple26/Centralized-Spring-Cloud-Config-for-Quiz-and-Question-Microservices-App`
+
+2. **ServiceRegistry (Eureka)** (`port: 8761`)
+   - Central service discovery 🏷️
+   - Registers QuizService and QuestionService
+   - Enables load balancing for microservices
+
+3. **QuizService** (`port: 8081`)
    - Manages quizzes 📝
-   - Uses `QuestionClient` to fetch related questions
+   - Uses `QuestionClient` to fetch related questions / Uses `Feign Client` to fetch questions from QuestionService
    - CRUD endpoints:
      - `POST /quiz` - Create a quiz
      - `GET /quiz` - Get all quizzes
@@ -15,7 +28,7 @@ A complete Spring Boot Microservices project with QuizService &amp; QuestionServ
    - Test endpoint:
      - `GET /quiz-test` - Simple test controller
 
-2. **QuestionService** (`port: 9092` and `port: 8082`)
+4. **QuestionService** (`port: 9092` and `port: 8082`)
    - Manages questions ❓
    - Runs multiple instances for load balancing via Eureka ⚖️
    - CRUD endpoints:
@@ -24,12 +37,8 @@ A complete Spring Boot Microservices project with QuizService &amp; QuestionServ
      - `GET /question/{questionId}` - Get question by ID
      - `GET /question/quiz/{quizId}` - Get questions of a specific quiz
 
-3. **ServiceRegistry (Eureka)** (`port: 8761`)
-   - Central service discovery 🏷️
-   - Registers QuizService and QuestionService
-   - Enables load balancing for microservices
-
-4. **ApiGateway** (`port: 8083`)
+5. **ApiGateway** (`port: 8083`)
+   - Single entry point 
    - Routes requests to QuizService & QuestionService 🌐
    - Handles:
      - `/quiz/**` and `/quiz-test/**` → QuizService
@@ -38,24 +47,28 @@ A complete Spring Boot Microservices project with QuizService &amp; QuestionServ
 ---
 
 ## 💡 Features
+- Centralized configuration using Spring Cloud Config Server
 - Fully functional **CRUD operations** for quizzes and questions
 - **Feign Client** integration between services
 - **Eureka Service Registry** for service discovery
 - **Spring Cloud Gateway** for routing
 - **MySQL** persistence for both services
 - Dynamic retrieval of quiz-related questions
+- Scalable & production-style microservices setup
 
 ---
 
 ## ⚙️ Technologies Used
 - Java 21 🟢
-- Spring Boot 3.x 🌟
+- Spring Boot 3.2.5 🌟
 - Spring Data JPA & Hibernate
+- Spring Cloud Config Server
 - Spring Cloud OpenFeign
 - Spring Cloud Gateway
 - Eureka Server
 - MySQL 🐬
 - Lombok ✨
+- Maven 📦
 
 ---
 
@@ -82,6 +95,30 @@ A complete Spring Boot Microservices project with QuizService &amp; QuestionServ
 │   │           └── com/
 │   │               └── gateway/
 │   │                   └── ApiGatewayApplicationTests.java
+│   ├── .gitattributes
+│   ├── .gitignore
+│   ├── mvnw
+│   ├── mvnw.cmd
+│   └── pom.xml
+├── ConfigServer/
+│   ├── .mvn/
+│   │   └── wrapper/
+│   │       └── maven-wrapper.properties
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/
+│   │   │   │   └── com/
+│   │   │   │       └── config/
+│   │   │   │           └── ConfigServer/
+│   │   │   │               └── ConfigServerApplication.java
+│   │   │   └── resources/
+│   │   │       └── application.properties
+│   │   └── test/
+│   │       └── java/
+│   │           └── com/
+│   │               └── config/
+│   │                   └── ConfigServer/
+│   │                       └── ConfigServerApplicationTests.java
 │   ├── .gitattributes
 │   ├── .gitignore
 │   ├── mvnw
@@ -179,6 +216,7 @@ A complete Spring Boot Microservices project with QuizService &amp; QuestionServ
 ├── .gitignore
 ├── LICENSE
 └── README.md
+
 ```
 
 ---
@@ -187,18 +225,29 @@ A complete Spring Boot Microservices project with QuizService &amp; QuestionServ
 1. Clone the repository
 ```
 git clone https://github.com/OmPimple26/Spring-Boot-Microservices-Quiz-and-Question-App.git
+git clone https://github.com/OmPimple26/Centralized-Spring-Cloud-Config-for-Quiz-and-Question-Microservices-App.git
 ```
 
-2. Start MySQL databases for quizzes and questions
+2. Start MySQL server and create databases for quizzes and questions
+```
+CREATE DATABASE quizdb;
+CREATE DATABASE questionsdb;
+```
 
-3. Run ServiceRegistry
+3️. Run services in this exact order
 
-4. Run QuizService and QuestionService
+- ServiceRegistry (Eureka Server)
+- ConfigServer
+- QuestionService
+- QuizService
+- ApiGateway
 
-5. Run ApiGateway
+4️. Access APIs
 
-6. Access APIs via ```http://localhost:8083```
-
+- API Gateway → ```http://localhost:8083```
+- Eureka Dashboard → ```http://localhost:8761```
+- Config Server → ```http://localhost:8888```
+  
 ---
 
 ## 📸 Screenshots
@@ -207,16 +256,24 @@ git clone https://github.com/OmPimple26/Spring-Boot-Microservices-Quiz-and-Quest
 <img width="1724" height="952" alt="Quiz-Application Microservices Application Diagram" src="https://github.com/user-attachments/assets/7d2fc419-c107-4d38-b58e-ae3c1fafe454" />
 
 ### 🏷️ Eureka Service Registry – Registered Services Overview
-<img width="1896" height="856" alt="Spring-Eureka-Dashboard-1" src="https://github.com/user-attachments/assets/5e18dbcd-d51a-4bb5-b233-b243539cd8ab" />
+<img width="1890" height="865" alt="Spring-Eureka-Dashboard-4" src="https://github.com/user-attachments/assets/641eff45-b801-4bfa-a41f-d8b433109ab8" />
 
 ### 🔌 Eureka Server – Microservices Instance Details
-<img width="1895" height="859" alt="Spring-Eureka-Dashboard-2" src="https://github.com/user-attachments/assets/dd58494c-83e0-4e59-802a-5c3b6c5b5a9a" />
+<img width="1890" height="859" alt="Spring-Eureka-Dashboard-5" src="https://github.com/user-attachments/assets/a7807db1-22e7-46b5-8d93-222f2b9ff7ef" />
 
 ### 📡 Eureka Dashboard – QuizService & QuestionService Status
-<img width="1896" height="832" alt="Spring-Eureka-Dashboard-3" src="https://github.com/user-attachments/assets/eab490e4-7d40-4849-ba43-a89a03c59aa1" />
+<img width="1896" height="823" alt="Spring-Eureka-Dashboard-6" src="https://github.com/user-attachments/assets/909fa05d-1dbf-43b3-9041-9259ee4cd83f" />
 
 ---
 
-## 📫 Contact
+## 📫 Contact & Contribution
 
-For queries or contributions, feel free to open an issue or pull request. Enjoy building and learning Microservices! 🎉
+Feel free to:
+
+- Open an issue 🐞
+
+- Submit a pull request 🔁
+
+- Fork and enhance the project ⭐
+
+Happy Learning & Building Microservices! 🎉🔥
